@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Favorite People 💖</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4);
+        font-family: 'Segoe UI', sans-serif;
+        overflow: hidden;
+    }
+
+    .card {
+        background: white;
+        padding: 40px;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        width: 380px;
+        position: relative;
+        z-index: 2;
+    }
+
+    h1 {
+        color: #ff4d6d;
+        margin-bottom: 10px;
+    }
+
+    select {
+        padding: 8px;
+        border-radius: 15px;
+        border: 1px solid #ff4d6d;
+        margin-bottom: 15px;
+        cursor: pointer;
+    }
+
+    .buttons {
+        margin-top: 15px;
+    }
+
+    button {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        border-radius: 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    #yesBtn {
+        background-color: #ff4d6d;
+        color: white;
+    }
+
+    #noBtn {
+        background-color: #888;
+        color: white;
+        position: relative;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+    }
+
+    #message {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #ff4d6d;
+    }
+
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Hey Bestie 💕</h1>
+
+    <select id="nameSelect">
+        <option value="">Select your name 💌</option>
+        <option value="Iman">Iman</option>
+        <option value="Ikram">Ikram</option>
+        <option value="Sara">Sara</option>
+        <!-- Add more names here -->
+    </select>
+
+    <p>Do you love me? 🥺</p>
+
+    <div class="buttons">
+        <button id="yesBtn">Yes 💖</button>
+        <button id="noBtn">No 😭</button>
+    </div>
+
+    <div id="message"></div>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const message = document.getElementById("message");
+const nameSelect = document.getElementById("nameSelect");
+
+yesBtn.addEventListener("click", function() {
+    const name = nameSelect.value;
+    if(name === "") {
+        message.innerHTML = "Select your name first 😌💅";
+        return;
+    }
+
+    message.innerHTML = "I knew it " + name + " 😭💖 You're my favorite human!";
+    startFireworks();
+});
+
+noBtn.addEventListener("mouseover", function() {
+    const x = Math.random() * 300 - 150;
+    const y = Math.random() * 300 - 150;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+// FIREWORKS
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function startFireworks() {
+    for(let i = 0; i < 50; i++) {
+        setTimeout(createFirework, i * 100);
+    }
+}
+
+function createFirework() {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height / 2;
+    const particles = [];
+
+    for(let i = 0; i < 50; i++) {
+        particles.push({
+            x: x,
+            y: y,
+            angle: Math.random() * 2 * Math.PI,
+            speed: Math.random() * 5 + 2,
+            radius: 2,
+            life: 100
+        });
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.x += Math.cos(p.angle) * p.speed;
+            p.y += Math.sin(p.angle) * p.speed;
+            p.life--;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+            ctx.fillStyle = `hsl(${Math.random()*360}, 100%, 50%)`;
+            ctx.fill();
+        });
+
+        if(particles[0].life > 0) {
+            requestAnimationFrame(animate);
+        }
+    }
+
+    animate();
+}
+</script>
+
+</body>
+</html>
